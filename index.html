@@ -59,11 +59,13 @@
     <audio data-key="76" src= "sounds/01 - JavaScript Drum Kit_sounds_tink.wav"></audio>
 
     <script>
-        window.addEventListener('keydown', function(e){
+        function playSound(e){
             // console.log(e); prints different attributes in keydown event 
             // console.log(e.keyCode); prints value of the keycode of the keydown event
 
             const audio =  document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
             //console.log(audio); used searched for key attribute for an element in HTML
 
             if(!audio) return; //stop the function from running all together
@@ -71,9 +73,25 @@
             audio.currentTime = 0; //rewind to the start
             audio.play();
 
+            // console.log(key); prints the tag matching queryselector key value
 
-        });
+            key.classList.add('playing');
+        }
 
+        function removeTransition(e) {
+            // console.log(e); prints the all attributes in the transition event
+
+            if(e.propertyName !== 'transform') return; //skip if it's not a transform
+            // console.log(e.propertyName);
+
+            this.classList.remove('playing');
+
+
+        }
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key=>key.addEventListener('transitionend', removeTransition));
+
+        window.addEventListener('keydown', playSound);
     </script>
 </body>
 </html>
